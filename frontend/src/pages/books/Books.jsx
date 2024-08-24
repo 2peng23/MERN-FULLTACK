@@ -5,11 +5,11 @@ import { MdOutlineAddBox, MdDelete } from "react-icons/md";
 import { FaInfoCircle } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
 import { DataGrid } from "@mui/x-data-grid";
-import Spinner from "../components/Spinner";
-import BookInfo from "../components/Book/BookInfo";
-import SearchModule from "../components/Book/Search";
+import Spinner from "../../components/Spinner";
+import BookInfo from "../../components/Book/BookInfo";
+import SearchModule from "../../components/Book/Search";
 import { IconButton, Tooltip } from "@mui/material";
-import Message from "../components/Message";
+import Message from "../../components/Message";
 
 const Books = () => {
   const [books, setBooks] = useState([]);
@@ -140,9 +140,8 @@ const Books = () => {
 
   return (
     <div className="p-4">
-      <div className="flex justify-between items-center mb-20">
-        {/* <h1 className="text-3xl my-8">Book List</h1> */}
-        <Link to="/books/create" className="absolute right-8 top-8">
+      <div className="flex justify-end items-center py-5">
+        <Link to="/books/create">
           <MdOutlineAddBox className="text-sky-800 text-4xl" />
         </Link>
       </div>

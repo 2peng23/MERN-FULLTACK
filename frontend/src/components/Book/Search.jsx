@@ -9,6 +9,8 @@ import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
 import { TbTableExport } from "react-icons/tb";
 import * as XLSX from "xlsx";
+import { Link } from "react-router-dom";
+import { MdOutlineAddBox } from "react-icons/md";
 
 export default function SearchModule({ title, data }) {
   const exportToExcel = (data, fileName) => {

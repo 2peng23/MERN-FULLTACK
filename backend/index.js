@@ -19,7 +19,7 @@ app.use(
 const port = process.env.APP_PORT || 3000; // Provide a default port if APP_PORT is not defined
 
 // Define routes and middleware before starting the server
-app.use("/api/books", route);
+app.use("/api", route);
 
 mongoose
   .connect(process.env.MONGO_DB_URL)
