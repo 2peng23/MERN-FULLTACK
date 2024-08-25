@@ -3,10 +3,15 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const route = require("./route.js");
 const passport = require("passport");
 const session = require("express-session");
-require("./auth/passport.js")
+require("./auth/passport.js");
+const authRoute = require("./routes/authRoute.js");
+const userRoute = require("./routes/userRoute.js");
+const bookRoute = require("./routes/bookRoute.js");
+const noteRoute = require("./routes/noteRoute.js");
+const checkToken = require("./auth/middleware/validation.js");
+const noteContoller = require("./Controller/noteContoller.js");
 
 dotenv.config(); // Load environment variables
 
@@ -23,7 +28,7 @@ mongoose
     });
   })
   .catch((err) => {
-    console.log(err);
+    console.log("Connection Error");
   });
 
 // Connection to frontend
@@ -55,4 +60,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Define routes and middleware before starting the server
-app.use("/api", route);
+app.post("/api", noteRoute);
+app.use("/api", authRoute);
+app.use("/api", userRoute);
+app.use("/api", checkToken, bookRoute);

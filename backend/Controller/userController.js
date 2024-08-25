@@ -39,7 +39,7 @@ const getUsers = (req, res) => {
 
 const profile = (req, res) => {
   const jwtToken = req.cookies.token; // Get the token from the cookie
-  console.log(jwtToken);
+  // console.log(jwtToken);
 
   if (jwtToken) {
     jwt.verify(jwtToken, process.env.JWT_SECRET_ACCESS, (err, user) => {

@@ -27,12 +27,7 @@ const Books = () => {
     // This useEffect will run only on the initial load
     setLoading(true);
     axios
-      .get("/books/", {
-        headers: {
-          "Authorization": token,
-          "Content-Type": "application/json",
-        },
-      })
+      .get("/books/")
       .then((res) => {
         setBooks(res.data.message);
         setLoading(false);
@@ -47,12 +42,7 @@ const Books = () => {
   useEffect(() => {
     // This useEffect will run whenever deleteTrigger changes
     axios
-      .get("/books/", {
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      })
+      .get("/books/")
       .then((res) => {
         setBooks(res.data.message);
       })
