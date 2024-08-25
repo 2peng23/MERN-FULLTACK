@@ -1,18 +1,34 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../../context/userContext";
 const Login = () => {
   const [data, setData] = useState({
     email: "",
     password: "",
   });
+  const { setUser } = useContext(UserContext);
   const setValue = (e, field) => {
     setData({ ...data, [field]: e.target.value });
   };
+  const nav = useNavigate();
 
   const handleSubmit = (e) => {
-    
-    console.log(data);
+    e.preventDefault();
+    axios
+      .post("/user/login", data)
+      .then((res) => {
+        console.log(res);
+        setUser(res.data.data);
+        toast.success(res.data.message);
+        nav("/dashboard");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+        console.log(err);
+      });
   };
 
   return (

@@ -1,4 +1,5 @@
-import { BookService } from "../Service/BookService.js";
+const  BookService  = require('../Service/BookService');
+
 
 const allBoooks = (req, res) => {
   BookService.allBooks((error, response) => {
@@ -78,7 +79,7 @@ const deleteBook = (req, res) => {
   });
 };
 
-export const bookController = {
+module.exports = bookController = {
   allBoooks,
   createBook,
   getBook,

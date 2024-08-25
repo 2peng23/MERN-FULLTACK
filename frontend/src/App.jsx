@@ -8,17 +8,24 @@ import NavBar from "./components/NavBar";
 import Login from "./pages/guest/Login";
 import Register from "./pages/guest/Register";
 import Users from "./components/User/User";
-
+import axios from "axios";
+import { Toaster } from "react-hot-toast";
+import Dashboard from "./components/Dashboard";
+axios.defaults.baseURL = "http://localhost:5555/api";
+axios.defaults.withCredentials = true;
 const App = () => {
   return (
     <div>
       <NavBar />
+      <Toaster position="bottom-left" toastOptions={{ duration: 3000 }} />
       <Routes>
         {/* users */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/users" element={<Users />} />
 
+        {/* dashboard */}
+        <Route path="/dashboard" element={<Dashboard />} />
 
         {/* books */}
         <Route path="/books" element={<Books />} />

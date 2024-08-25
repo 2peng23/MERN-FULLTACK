@@ -1,7 +1,11 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const bookSchema = mongoose.Schema(
   {
+    book_user_id: {
+      type: String,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -19,4 +23,5 @@ const bookSchema = mongoose.Schema(
     timestamps: true,
   }
 );
-export const Book = mongoose.model("Book", bookSchema);
+const Book = mongoose.model("Book", bookSchema);
+module.exports = Book;

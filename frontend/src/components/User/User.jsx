@@ -25,7 +25,7 @@ const Users = () => {
     // This useEffect will run only on the initial load
     setLoading(true);
     axios
-      .get("http://127.0.0.1:5555/api/users/")
+      .get("/users/")
       .then((res) => {
         setUsers(res.data.data);
         setLoading(false);
@@ -39,7 +39,7 @@ const Users = () => {
   useEffect(() => {
     // This useEffect will run whenever deleteTrigger changes
     axios
-      .get("http://127.0.0.1:5555/api/users/")
+      .get("/users/")
       .then((res) => {
         setUsers(res.data.data);
       })
@@ -53,7 +53,7 @@ const Users = () => {
     setSelectedUser(book);
     setOpen(true);
     // await axios
-    //   .get(`http://127.0.0.1:5555/api/books/${bookId}`)
+    //   .get(`/books/${bookId}`)
     //   .then((book) => {
     //     setSelectedBook(book.data.message);
     //     setOpen(true);
@@ -66,7 +66,7 @@ const Users = () => {
   };
   const handleDelete = async (bookId) => {
     await axios
-      .delete(`http://127.0.0.1:5555/api/users/${bookId}`)
+      .delete(`/users/${bookId}`)
       .then((book) => {
         if (book.data.success == 1) {
           setOpenMessage(true);

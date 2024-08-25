@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdOutlineAddBox, MdDelete } from "react-icons/md";
 import { FaInfoCircle } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
@@ -10,6 +10,8 @@ import BookInfo from "../../components/Book/BookInfo";
 import SearchModule from "../../components/Book/Search";
 import { IconButton, Tooltip } from "@mui/material";
 import Message from "../../components/Message";
+import { token } from "../../helpers/auth";
+import { toast } from "react-hot-toast";
 
 const Books = () => {
   const [books, setBooks] = useState([]);
@@ -20,18 +22,24 @@ const Books = () => {
   const [message, setMessage] = useState("");
   const [deleteTrigger, setDeleteTrigger] = useState(0); // State to trigger useEffect
   const [color, setColor] = useState("gray");
-
+  const nav = useNavigate();
   useEffect(() => {
     // This useEffect will run only on the initial load
     setLoading(true);
     axios
-      .get("http://127.0.0.1:5555/api/books/")
+      .get("/books/", {
+        headers: {
+          "Authorization": token,
+          "Content-Type": "application/json",
+        },
+      })
       .then((res) => {
         setBooks(res.data.message);
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        nav("/login");
+        toast.error(err.response.data.message);
         setLoading(false);
       });
   }, []); // Empty dependency array to run only once on mount
@@ -39,7 +47,12 @@ const Books = () => {
   useEffect(() => {
     // This useEffect will run whenever deleteTrigger changes
     axios
-      .get("http://127.0.0.1:5555/api/books/")
+      .get("/books/", {
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+        },
+      })
       .then((res) => {
         setBooks(res.data.message);
       })
@@ -53,7 +66,7 @@ const Books = () => {
     setSelectedBook(book);
     setOpen(true);
     // await axios
-    //   .get(`http://127.0.0.1:5555/api/books/${bookId}`)
+    //   .get(`/books/${bookId}`)
     //   .then((book) => {
     //     setSelectedBook(book.data.message);
     //     setOpen(true);
@@ -66,7 +79,7 @@ const Books = () => {
   };
   const handleDelete = async (bookId) => {
     await axios
-      .delete(`http://127.0.0.1:5555/api/books/${bookId}`)
+      .delete(`/books/${bookId}`)
       .then((book) => {
         if (book.data.success == 1) {
           setOpenMessage(true);

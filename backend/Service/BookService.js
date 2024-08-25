@@ -1,5 +1,4 @@
-import { Book } from "../Models/BookModel.js";
-
+const Book = require("../Models/BookModel");
 const allBooks = async (callBack) => {
   try {
     const books = await Book.find();
@@ -50,10 +49,10 @@ const deleteBook = async (id, callBack) => {
   }
 };
 
-export const BookService = {
+module.exports = BookService = {
   createBook,
   allBooks,
   getBook,
   updateBook,
   deleteBook,
-};
+}

@@ -1,36 +1,39 @@
 import React, { useState } from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import axios from "axios";
-
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 const Register = () => {
   const [data, setData] = useState({
     name: "",
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const setValue = (e, field) => {
     setData({ ...data, [field]: e.target.value });
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    e.preventDefault();
     axios
-      .post("http://127.0.0.1:5555/api/user/create", data)
+      .post("/user/create", data)
       .then((res) => {
-        console.log(res.data.success);
-        if(res.data.success === 1){
+        console.log(res);
+        if (res.data.success === 1) {
           setData({
             name: "",
             password: "",
             email: "",
-          })
+          });
         }
+        toast.success("Registered Successfully!");
+        navigate("/books");
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response.data.message);
+        toast.error(err.response.data.message);
       });
-    console.log(data);
   };
 
   return (
