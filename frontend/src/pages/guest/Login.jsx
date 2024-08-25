@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../../context/userContext";
+import { Link } from "react-router-dom";
 const Login = () => {
   const [data, setData] = useState({
     email: "",
@@ -21,7 +22,7 @@ const Login = () => {
       .post("/user/login", data)
       .then((res) => {
         console.log(res);
-        setUser(res.data.data);
+        // setUser(res.data.data);
         toast.success(res.data.message);
         nav("/dashboard");
       })
@@ -29,6 +30,11 @@ const Login = () => {
         toast.error(err.response.data.message);
         console.log(err);
       });
+  };
+
+  const googleLogin = () => {
+    // Redirect to your Express server's Google OAuth2 endpoint
+    window.location.href = "http://localhost:5555/api/auth/google";
   };
 
   return (
@@ -77,6 +83,12 @@ const Login = () => {
             Sign In
           </Button>
         </Box>
+        <Typography component="div" className="flex w-full justify-between">
+          <Button onClick={googleLogin}>Sign in with Google</Button>
+          <Link to="/register">
+            <Button>Register</Button>
+          </Link>
+        </Typography>
       </Box>
     </Container>
   );

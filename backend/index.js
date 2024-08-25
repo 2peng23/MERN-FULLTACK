@@ -1,9 +1,12 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const route = require('./route.js');
+const express = require("express");
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const route = require("./route.js");
+const passport = require("passport");
+const session = require("express-session");
+require("./auth/passport.js")
 
 dotenv.config(); // Load environment variables
 
@@ -14,7 +17,7 @@ const port = process.env.APP_PORT || 3000; // Provide a default port if APP_PORT
 mongoose
   .connect(process.env.MONGO_DB_URL)
   .then(() => {
-    console.log('Database Connected');
+    console.log("Database Connected");
     app.listen(port, () => {
       console.log(`The server is running on port ${port}`);
     });
@@ -27,9 +30,9 @@ mongoose
 app.use(
   cors({
     credentials: true,
-    origin: 'http://localhost:5173',
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
@@ -37,6 +40,19 @@ app.use(
 app.use(cookieParser()); // Parse cookies
 app.use(express.json()); // Parse JSON requests
 app.use(express.urlencoded({ extended: false })); // Parse URL-encoded data
+// Session middleware
+app.use(
+  session({
+    secret: process.env.JWT_SECRET_ACCESS, // Replace with your secret key
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }, // Set to true in production with HTTPS
+  })
+);
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Define routes and middleware before starting the server
-app.use('/api', route);
+app.use("/api", route);
