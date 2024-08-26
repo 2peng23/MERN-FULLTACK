@@ -13,6 +13,7 @@ JWT Token: Used for authentication and secure communication.
 Google OAuth: Allows users to sign in using their Google accounts.
 
 
+
 API Endpoints
 Create Note {POST}: /api/notes
 
@@ -28,10 +29,22 @@ Update Note {PATCH}: /api/note/:id
 
 
 Running the Project
-Frontend:
+Frontend: port must be 5173 set on cors
 Navigate to the frontend directory and run the development server.
-Backend:
 
+
+Backend: port must 5555 set on cors
 I already include .env with necessary environment variables.
 Navigate to the backend directory and run the server.
 Both frontend and backend should be run in development mode to see the application in action.
+
+
+And lastly, to manually create an admin user this is the endpoint
+
+/api/user/create  {POST}
+body request should be
+name
+email
+password
+role: 1 //must be one because new registered user default is 0 and that's how I filter admin/client
+
