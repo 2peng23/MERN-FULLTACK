@@ -15,7 +15,7 @@ const googleCallBack = (req, res, next) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { name: user.name, email: user.email, id: user._id }, // Payload
+      { name: user.name, email: user.email, id: user._id, role: user.user_role }, // Payload
       process.env.JWT_SECRET_ACCESS, // Secret key
       { expiresIn: "1d" } // 1 day
     );

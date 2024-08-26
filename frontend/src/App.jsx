@@ -1,5 +1,5 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
+import React, { useContext } from "react";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Books from "./pages/books/Books";
 import CreateBook from "./pages/books/CreateBook";
 import EditBook from "./pages/books/EditBook";
@@ -12,30 +12,70 @@ import axios from "axios";
 import { Toaster } from "react-hot-toast";
 import Dashboard from "./components/Dashboard";
 import Notes from "./components/Note/Note";
+import { UserContext } from "../context/userContext";
+
 axios.defaults.baseURL = "http://localhost:5555/api";
 axios.defaults.withCredentials = true;
+
 const App = () => {
+  const { user } = useContext(UserContext);
+
   return (
     <div>
       <NavBar />
       <Toaster position="bottom-left" toastOptions={{ duration: 3000 }} />
       <Routes>
-        {/* users */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/users" element={<Users />} />
+        {/* Redirect logged-in users from login/register pages to dashboard */}
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/dashboard" /> : <Login />}
+        />
+        <Route
+          path="/register"
+          element={user ? <Navigate to="/dashboard" /> : <Register />}
+        />
 
-        {/* dashboard */}
-        <Route path="/dashboard" element={<Dashboard />} />
+        {/* Protected routes */}
+        <Route
+          path="/dashboard"
+          element={user ? <Dashboard /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/users"
+          element={user ? <Users /> : <Navigate to="/login" />}
+        />
 
-        {/* books */}
-        <Route path="/books" element={<Books />} />
-        <Route path="/books/create" element={<CreateBook />} />
-        <Route path="/books/edit/:id" element={<EditBook />} />
-        <Route path="/books/delete/:id" element={<DeleteBook />} />
+        {/* Books routes */}
+        <Route
+          path="/books"
+          element={user ? <Books /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/books/create"
+          element={user ? <CreateBook /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/books/edit/:id"
+          element={user ? <EditBook /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/books/delete/:id"
+          element={user ? <DeleteBook /> : <Navigate to="/login" />}
+        />
 
         {/* Notes */}
-        <Route path="/notes" element={<Notes />}></Route>
+        <Route
+          path="/notes"
+          element={user ? <Notes /> : <Navigate to="/login" />}
+        />
+
+        {/* Redirect from root to dashboard if user is logged in, otherwise to login */}
+        <Route
+          path="/"
+          element={
+            user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
+          }
+        />
       </Routes>
     </div>
   );

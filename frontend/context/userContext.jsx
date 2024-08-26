@@ -19,7 +19,7 @@ export function UserContextProvider({ children }) {
           console.log(err);
         });
     }
-  }, [user]);
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, setUser, token, setToken }}>

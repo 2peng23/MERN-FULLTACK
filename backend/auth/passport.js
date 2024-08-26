@@ -6,6 +6,7 @@ const id = process.env.GOOGLE_OAUTH_CLIENT_ID;
 const secret = process.env.GOOGLE_OAUTH_CLIENT_SECRET;
 const userService = require("../Service/UserService");
 const jwt = require("jsonwebtoken");
+const authHelper = require("../helpers/auth");
 passport.use(
   new GoogleStrategy(
     {
@@ -26,7 +27,25 @@ passport.use(
             email: profile.email,
             password: profile.displayName, // Consider hashing the password or using a secure method
           };
-          user = await userService.createUser(userData, null);
+          try {
+            const exist = await User.findOne({ email: userData.email });
+            if (exist) {
+              // Handle errors appropriately
+              return done(null, false, { message: "Email already taken!" });
+            }
+            const hashedPassword = await authHelper.hashPassword(
+              userData.password
+            );
+            user = await User.create({
+              ...userData,
+              password: hashedPassword,
+            });
+          } catch (error) {
+            // Handle errors appropriately
+            return done(error, false, {
+              message: "An error occurred during authentication",
+            });
+          }
         }
         // Pass the user to the done callback
         return done(null, user);

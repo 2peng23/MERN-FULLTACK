@@ -28,7 +28,7 @@ const Register = () => {
           });
         }
         toast.success("Registered Successfully!");
-        navigate("/books");
+        navigate("/notes");
       })
       .catch((err) => {
         console.log(err.response.data.message);

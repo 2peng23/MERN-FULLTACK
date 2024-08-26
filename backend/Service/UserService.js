@@ -16,7 +16,7 @@ const createUser = async (data, callBack) => {
     });
     return callBack(null, user);
   } catch (error) {
-    callBack(error);
+    return callBack(error);
   }
 };
 const getUsers = async (callBack) => {
@@ -36,7 +36,7 @@ const loginUser = async (data, callBack) => {
     // const hashedPassword = await authHelper.hashPassword(data.password);
     const isMatch = await authHelper.comparePassword(
       data.password, //password from client-side
-      user.password, //password from db
+      user.password //password from db
     );
     if (!isMatch) {
       return callBack("Invalid Credentials");

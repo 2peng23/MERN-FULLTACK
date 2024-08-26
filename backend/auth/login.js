@@ -13,7 +13,12 @@ const loginUser = (req, res) => {
 
     // sign the JWT token
     jwt.sign(
-      { name: response.name, email: response.email, id: response._id }, // Payload
+      {
+        name: response.name,
+        email: response.email,
+        id: response._id,
+        role: response.user_role,
+      }, // Payload
       process.env.JWT_SECRET_ACCESS, // Secret key
       { expiresIn: "1d" }, // 1 day
       (err, token) => {
@@ -43,4 +48,4 @@ const loginUser = (req, res) => {
     );
   });
 };
-module.exports = loginUser
+module.exports = loginUser;

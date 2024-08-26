@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -12,6 +12,7 @@ import {
   MenuItem,
   IconButton,
   Tooltip,
+  Button,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { MdDelete } from "react-icons/md";
@@ -19,7 +20,8 @@ import { CiEdit } from "react-icons/ci";
 import DeleteModal from "../../components/Modal/DeleteModal";
 import axios from "axios";
 import Message from "../../components/Message";
-import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../../context/userContext";
+import EditModal from "../../components/Modal/EditModal";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -30,38 +32,38 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const NoteInfo = ({ notes }) => {
+  // pages & note
   const [page, setPage] = useState(1);
   const [notesPerPage, setNotesPerPage] = useState(20);
   const [tag, setTag] = useState("to do");
   const [allNotes, setAllNotes] = useState(notes);
 
+  // modals
   const [openModal, setOpenModal] = useState(false);
   const [noteId, setNoteId] = useState(null);
-  const [deleteTrigger, setDeleteTrigger] = useState(0);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const closeModal = () => setOpenModal(false);
+  const closeEditModal = () => setOpenEditModal(false);
 
+  // delete
+  const [deleteTrigger, setDeleteTrigger] = useState(0);
+  const [updateTrigger, setUpdateTrigger] = useState(0);
+
+  //response
   const [openMessage, setOpenMessage] = useState(false);
   const [message, setMessage] = useState("");
   const [color, setColor] = useState("gray");
+
+  // user
+  const { user } = useContext(UserContext);
 
   const handleOpenDeleteModal = (id) => {
     setNoteId(id);
     setOpenModal(true);
   };
-
-  const closeModal = () => setOpenModal(false);
-  const handleDelete = async () => {
-    await axios
-      .delete(`/notes/${noteId}`)
-      .then((res) => {
-        setOpenModal(false);
-        setOpenMessage(true);
-        setMessage(res.data.message);
-        setDeleteTrigger((prev) => prev + 1); // Update deleteTrigger to re-run useEffect
-        setColor("red");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const handleOpenEditModal = (id) => {
+    setNoteId(id);
+    setOpenEditModal(true);
   };
 
   const handlePageChange = (event, value) => {
@@ -79,17 +81,63 @@ const NoteInfo = ({ notes }) => {
     (page - 1) * notesPerPage,
     page * notesPerPage
   );
-  const nav = useNavigate()
+  const fetchNotes = async () => {
+    try {
+      let role = null;
+      let userId = null;
+      if (user && user.role !== undefined) {
+        // Explicitly check if user.role is defined
+        role = user.role;
+        userId = user.id;
+      } else if (user && user.user_role !== undefined) {
+        // Check if user.user_role is defined
+        role = user.user_role;
+        userId = user._id;
+      }
+      const userRoute = user && role === 1 ? "/notes" : `/notes/${userId}`;
+      const res = await axios.get(userRoute);
+      setAllNotes(res.data.data);
+    } catch (err) {
+      nav("/login");
+      toast.error(err.response?.data?.message || "An error occurred");
+    }
+  };
+
   useEffect(() => {
+    fetchNotes();
+  }, [deleteTrigger, updateTrigger]);
+
+  // update Note
+  const handleUpdate = (data) => {
     axios
-      .get("/notes/")
+      .patch(`note/${noteId}`, data)
       .then((res) => {
-        setAllNotes(res.data.data);
+        console.log(res);
+        setOpenEditModal(false);
+        setOpenMessage(true);
+        setMessage(res.data.message);
+        setUpdateTrigger((prev) => prev + 1); // Update deleteTrigger to re-run useEffect
+        setColor("green");
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [deleteTrigger]);
+  };
+  // delete Note
+  const handleDelete = async () => {
+    await axios
+      .delete(`/notes/${noteId}`)
+      .then((res) => {
+        setOpenModal(false);
+        setOpenMessage(true);
+        setMessage(res.data.message);
+        setDeleteTrigger((prev) => prev + 1); // Update deleteTrigger to re-run useEffect
+        setColor("red");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <>
@@ -101,7 +149,7 @@ const NoteInfo = ({ notes }) => {
               xs={6}
               md={3}
               key={note._id}
-              style={{ marginBottom: "10px", padding: "2px" }}
+              style={{ marginBottom: "10px", padding: "5px" }}
             >
               <Item
                 className="flex justify-center align-middle shadow"
@@ -113,8 +161,7 @@ const NoteInfo = ({ notes }) => {
                   style={{
                     borderRadius: "10px",
                     padding: "10px",
-                    overflow: "auto",
-                    height: "180px",
+                    height: "400px",
                   }}
                 >
                   <Box sx={{ p: 2 }}>
@@ -123,40 +170,84 @@ const NoteInfo = ({ notes }) => {
                       justifyContent="space-between"
                       alignItems="center"
                     >
-                      <Typography gutterBottom variant="h5" component="div">
+                      <Typography
+                        gutterBottom
+                        variant="h5"
+                        component="div"
+                        style={{ height: "80px" }}
+                      >
                         {note.title}
                       </Typography>
-                      <Typography gutterBottom variant="h6" component="div">
-                        {note.price}
+                      <Typography
+                        gutterBottom
+                        variant="h6"
+                        component="div"
+                        style={{ whiteSpace: "nowrap" }}
+                      >
+                        <Button variant="outlined">
+                          {note.category_id == "1" && "Work"}
+                          {note.category_id == "2" && "Personal"}
+                          {note.category_id == "3" && "Study"}
+                          {!(
+                            note.category_id === "1" ||
+                            note.category_id === "2" ||
+                            note.category_id === "3"
+                          ) && "Not Set"}
+                        </Button>
                       </Typography>
                     </Stack>
-                    <Typography color="text.secondary" variant="body2">
+                    <Typography
+                      color="text.secondary"
+                      variant="body2"
+                      style={{
+                        maxHeight: "200px",
+                        height: "180px",
+                        overflow: "auto",
+                      }}
+                    >
                       {note.content}
                     </Typography>
                   </Box>
                   <Divider />
                   <Box
                     sx={{ p: 2 }}
-                    className="flex justify-between align-middle"
+                    className="flex justify-between align-middle h-1"
                   >
                     <Typography component={"div"}>
-                      <Select
-                        value={tag}
+                      {/* <Select
+                        value={note.tag_id?.toString() || "Not Set"}
                         onChange={(event) => setTag(event.target.value)}
-                        style={{ marginBottom: "10px" }}
+                        style={{ width: "150px", height: "30px" }}
                       >
-                        <MenuItem value={"to do"}>to do</MenuItem>
-                        <MenuItem value={"important"}>important</MenuItem>
-                        <MenuItem value={"meeting"}>meeting</MenuItem>
-                        <MenuItem value={"ideas"}>ideas</MenuItem>
-                      </Select>
+                        <MenuItem selected={note.tag_id == "1"} value="1">
+                          To Do
+                        </MenuItem>
+                        <MenuItem selected={note.tag_id == "2"} value="2">
+                          Reference
+                        </MenuItem>
+                        <MenuItem selected={note.tag_id == "3"} value="3">
+                          Meeting
+                        </MenuItem>
+                      </Select> */}
+                      <Button variant="contained">
+                        {note.tag_id == "1" && "To do"}
+                        {note.tag_id == "2" && "Reference"}
+                        {note.tag_id == "3" && "Meeting"}
+                        {!(
+                          note.tag_id === "1" ||
+                          note.tag_id === "2" ||
+                          note.tag_id === "3"
+                        ) && "Not Set"}
+                      </Button>
                     </Typography>
                     <Typography
                       component={"div"}
                       className="flex justify-between gap-2"
                     >
                       <Tooltip title="Edit Note">
-                        <IconButton>
+                        <IconButton
+                          onClick={() => handleOpenEditModal(note._id)}
+                        >
                           <CiEdit
                             style={{ color: "orange", fontSize: "24px" }}
                           />
@@ -208,9 +299,16 @@ const NoteInfo = ({ notes }) => {
       {openModal && (
         <DeleteModal
           open={openModal}
-          id={noteId}
           handleClose={closeModal}
           handleDelete={handleDelete}
+        />
+      )}
+      {openEditModal && (
+        <EditModal
+          open={openEditModal}
+          id={noteId}
+          handleClose={closeEditModal}
+          onSendData={handleUpdate}
         />
       )}
       <Message

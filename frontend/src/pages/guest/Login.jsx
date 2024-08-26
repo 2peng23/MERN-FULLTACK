@@ -21,10 +21,9 @@ const Login = () => {
     axios
       .post("/user/login", data)
       .then((res) => {
-        console.log(res);
-        // setUser(res.data.data);
+        setUser(res.data.data);
         toast.success(res.data.message);
-        nav("/dashboard");
+        nav("/notes");
       })
       .catch((err) => {
         toast.error(err.response.data.message);

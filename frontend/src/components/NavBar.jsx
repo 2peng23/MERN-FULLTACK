@@ -18,20 +18,29 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-
-const pages = ["books", "users", "notes"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [pages, setPages] = React.useState([]);
   const { user, setUser } = useContext(UserContext);
+  React.useEffect(() => {
+    if (user) {
+      if (user.role || user.user_role === 1) {
+        setPages(["books", "users", "notes"]);
+      } else {
+        setPages(["notes"]); // Or whatever the default should be
+      }
+    }
+  }, [user]);
   const nav = useNavigate();
   const handleLogout = () => {
     axios.post("/user/logout").then((res) => {
-      setUser(null)
+      setUser(null);
       toast.success("Logout Successfully!");
       nav("/login");
+      setPages([]);
     });
   };
   const handleOpenNavMenu = (event) => {

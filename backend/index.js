@@ -60,7 +60,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Define routes and middleware before starting the server
-app.use("/api", noteRoute);
 app.use("/api", authRoute);
 app.use("/api", userRoute);
+app.use("/api",checkToken, noteRoute);
 app.use("/api", checkToken, bookRoute);

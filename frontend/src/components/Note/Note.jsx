@@ -1,72 +1,122 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { MdOutlineAddBox, MdDelete } from "react-icons/md";
-import { FaInfoCircle } from "react-icons/fa";
-import { CiEdit } from "react-icons/ci";
-import { DataGrid } from "@mui/x-data-grid";
-import Spinner from "../Spinner";
-import BookInfo from "../Book/BookInfo";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { MdOutlineAddBox } from "react-icons/md";
 import SearchModule from "../Book/Search";
-import { IconButton, Tooltip } from "@mui/material";
-import Message from "../Message";
+import Spinner from "../Spinner";
 import NoteInfo from "../../pages/notes/Notes";
+import { toast } from "react-hot-toast";
+import { UserContext } from "../../../context/userContext";
+import Message from "../Message";
+import CreateModal from "../Modal/CreateModal";
 
 const Notes = () => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [selectedNote, setSelectedNote] = useState(null);
-  const [deleteTrigger, setDeleteTrigger] = useState(0); // State to trigger useEffect
   const [notes, setNotes] = useState([]);
+  const { user } = useContext(UserContext);
+  const nav = useNavigate();
+
+  const fetchNotes = async () => {
+    setLoading(true);
+    try {
+      let role = null;
+      let userId = null;
+
+      if (user && user.role !== undefined) {
+        // Explicitly check if user.role is defined
+        role = user.role;
+        userId = user.id;
+      } else if (user && user.user_role !== undefined) {
+        // Check if user.user_role is defined
+        role = user.user_role;
+        userId = user._id;
+      }
+      const userRoute = user && role === 1 ? "/notes" : `/notes/${userId}`;
+      const res = await axios.get(userRoute);
+      setNotes(res.data.data);
+    } catch (err) {
+      nav("/login");
+      toast.error(err.response?.data?.message || "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // trigger
+  const [createTrigger, setCreateTrigger] = useState(0);
 
   useEffect(() => {
-    // This useEffect will run only on the initial load
-    setLoading(true);
-    axios
-      .get("/notes/")
-      .then((res) => {
-        setNotes(res.data.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
-  }, []); // Empty dependency array to run only once on mount
+    fetchNotes();
+  }, [user, nav, createTrigger]);
 
-  const handleOpen = (bookId) => {
-    const note = notes.find((b) => b._id === bookId);
+  const handleOpen = (noteId) => {
+    const note = notes.find((n) => n._id === noteId);
     setSelectedNote(note);
     setOpen(true);
-    // await axios
-    //   .get(`/books/${bookId}`)
-    //   .then((book) => {
-    //     setSelectedBook(book.data.message);
-    //     setOpen(true);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     setOpen(false);
-    //     setSelectedBook(null);
-    //   });
   };
 
   const handleClose = () => {
     setOpen(false);
     setSelectedNote(null);
   };
+  //response
+  const [openMessage, setOpenMessage] = useState(false);
+  const [message, setMessage] = useState("");
+  const [color, setColor] = useState("gray");
   const closeMessage = () => {
     setOpenMessage(false);
   };
-
+  // create
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const handleOpenCreateModal = () => {
+    setOpenCreateModal(true);
+  };
+  const closeCreateModal = () => setOpenCreateModal(false);
+  // create Note
+  const handleCreate = (data) => {
+    console.log(data);
+    axios
+      .post("/notes/", data)
+      .then((res) => {
+        console.log(res);
+        setOpenCreateModal(false);
+        setOpenMessage(true);
+        setMessage(res.data.message);
+        setCreateTrigger((prev) => prev + 1); // Update deleteTrigger to re-run useEffect
+        setColor("green");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div className="p-4">
       <div className="flex justify-end items-center py-5">
-        <Link to="/books/create">
-          <MdOutlineAddBox className="text-sky-800 text-4xl" />
-        </Link>
+        <MdOutlineAddBox
+          className="text-sky-800 text-4xl"
+          onClick={() => handleOpenCreateModal()}
+          style={{cursor: "pointer"}}
+        />
+        {openCreateModal && (
+          <CreateModal
+            open={openCreateModal}
+            handleClose={closeCreateModal}
+            onSendData={handleCreate}
+          />
+        )}
       </div>
-      <SearchModule title={notes.length > 1 ? `My Notes ` : `My Note`} data={notes} />
+      <Message
+        message={message}
+        openMessage={openMessage}
+        closeMessage={closeMessage}
+        color={color}
+      />
+      <SearchModule
+        title={notes.length > 1 ? `My Notes` : `My Note`}
+        data={notes}
+      />
 
       {loading ? (
         <Spinner />
@@ -75,7 +125,7 @@ const Notes = () => {
           <NoteInfo notes={notes} />
         </div>
       )}
-      <BookInfo open={open} onClose={handleClose} book={selectedNote} />
+      {/* <BookInfo open={open} onClose={handleClose} book={selectedNote} /> */}
     </div>
   );
 };
