@@ -1,19 +1,37 @@
-STACK USED
-#MongoDB
-#ExpressJS
-#ReactJS
-#NodeJS
-
-SECURITY USED
-#JWT TOKEN
-#Google OAuth
-
-#API_Endpoints
-create note {POST} =  /api/notes
-get  notes of authenticated use {GET} = /api/notes/:user_id  , I create a UserContext on react to get the user info based on the cookie sent from jwt
-get details of specifi note {GET} = /api/note/:id
-update note {PATCH} = /api/note/:id   , I used patch on this, I forgot to use PUT
+Project README
 
 
-This website is running, just run on development both frontend and backend
-I also included .env of both files
+Stack Used
+MongoDB: NoSQL database for storing data.
+ExpressJS: Web application framework for Node.js.
+ReactJS: JavaScript library for building user interfaces.
+NodeJS: JavaScript runtime for server-side development.
+
+
+Security
+JWT Token: Used for authentication and secure communication.
+Google OAuth: Allows users to sign in using their Google accounts.
+
+
+API Endpoints
+Create Note {POST}: /api/notes
+
+Get Notes of Authenticated User {GET}: /api/notes/:user_id
+(Utilizes a UserContext in React to fetch user info based on the JWT cookie)
+
+Get Details of Specific Note {GET}: /api/note/:id
+
+Update Note {PATCH}: /api/note/:id
+
+(PATCH is used instead of PUT for partial updates)
+
+
+
+Running the Project
+Frontend:
+Navigate to the frontend directory and run the development server.
+Backend:
+
+I already include .env with necessary environment variables.
+Navigate to the backend directory and run the server.
+Both frontend and backend should be run in development mode to see the application in action.
