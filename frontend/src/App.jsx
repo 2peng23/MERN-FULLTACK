@@ -11,6 +11,7 @@ import Users from "./components/User/User";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
 import Dashboard from "./components/Dashboard";
+import Notes from "./components/Note/Note";
 axios.defaults.baseURL = "http://localhost:5555/api";
 axios.defaults.withCredentials = true;
 const App = () => {
@@ -32,6 +33,9 @@ const App = () => {
         <Route path="/books/create" element={<CreateBook />} />
         <Route path="/books/edit/:id" element={<EditBook />} />
         <Route path="/books/delete/:id" element={<DeleteBook />} />
+
+        {/* Notes */}
+        <Route path="/notes" element={<Notes />}></Route>
       </Routes>
     </div>
   );

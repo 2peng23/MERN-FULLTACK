@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-const pages = ["books", "users", "Blog"];
+const pages = ["books", "users", "notes"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
@@ -59,7 +59,7 @@ function ResponsiveAppBar() {
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/dashboard"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
