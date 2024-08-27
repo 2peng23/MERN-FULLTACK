@@ -2,7 +2,7 @@ Project README
 
 
 Stack Used
-MongoDB: NoSQL database for storing data.
+MongoDB database for storing data.
 ExpressJS: Web application framework for Node.js.
 ReactJS: JavaScript library for building user interfaces.
 NodeJS: JavaScript runtime for server-side development.
