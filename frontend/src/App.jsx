@@ -15,7 +15,7 @@ import Notes from "./components/Note/Note";
 import { UserContext } from "../context/userContext";
 
 // axios.defaults.baseURL = "http://localhost:5555/api";
-axios.defaults.baseURL = "http://https://mern-fulltack-cb3k4d8es-riorios-projects.vercel.app/api";
+axios.defaults.baseURL = "https://mern-fulltack-2z01vp8v0-riorios-projects.vercel.app/api";
 axios.defaults.withCredentials = true;
 
 const App = () => {
