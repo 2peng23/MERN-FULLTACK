@@ -31,11 +31,15 @@ mongoose
     console.log("Connection Error");
   });
 
+const allowedOrigins = [
+  "https://mern-fulltack-frontend.vercel.app",
+  "http://localhost:5173",
+];
 // Connection to frontend
 app.use(
   cors({
     credentials: true,
-    origin: "https://mern-fulltack-frontend.vercel.app",
+    origin: allowedOrigins,
     methods: ["GET", "POST", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })

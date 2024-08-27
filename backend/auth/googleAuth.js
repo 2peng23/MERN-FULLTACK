@@ -13,7 +13,7 @@ const googleCallBack = (req, res, next) => {
       return next(err); // Handle authentication errors
     }
     if (!user) {
-      return res.redirect("https://mern-fulltack-frontend.vercel.app/login"); // Handle authentication failure
+      return res.redirect("http://localhost:5173/login"); // Handle authentication failure
     }
 
     // Generate JWT token
@@ -33,7 +33,7 @@ const googleCallBack = (req, res, next) => {
     });
 
     // Redirect to your frontend or any other route
-    res.redirect("https://mern-fulltack-frontend.vercel.app/dashboard");
+    res.redirect("http://localhost:5173/dashboard");
   })(req, res, next);
 };
 
