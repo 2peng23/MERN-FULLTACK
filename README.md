@@ -48,3 +48,7 @@ email
 password
 role: 1 //must be one because new registered user default is 0 and that's how I filter admin/client
 
+Sample Credential for user using JWT
+test@test.com
+password
+
