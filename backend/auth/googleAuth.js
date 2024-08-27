@@ -1,9 +1,12 @@
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 
+// Google Authentication
 const googleAuth = passport.authenticate("google", {
   scope: ["email", "profile"],
 });
+
+// Google Callback
 const googleCallBack = (req, res, next) => {
   passport.authenticate("google", { session: false }, (err, user, info) => {
     if (err) {
@@ -23,7 +26,7 @@ const googleCallBack = (req, res, next) => {
     // Set the cookie with a 1-day expiration time
     res.cookie("token", token, {
       httpOnly: true, // Prevents JavaScript access
-      secure: true, // Not using HTTPS in local development
+      secure: process.env.NODE_ENV === "production", // Only secure in production
       maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day in milliseconds
       path: "/", // Available site-wide
       sameSite: "Lax", // Adjust if needed
@@ -34,7 +37,8 @@ const googleCallBack = (req, res, next) => {
   })(req, res, next);
 };
 
-module.exports = google = {
+// Export the module
+module.exports = {
   googleAuth,
   googleCallBack,
 };
