@@ -26,11 +26,17 @@ const style = {
 
 export default function CreateModal({ open, handleClose, onSendData }) {
   const { user } = React.useContext(UserContext);
+  const userId = null;
+  if (user._id) {
+    userId = user._id;
+  } else {
+    userId = user.id;
+  }
   const [data, setData] = React.useState({
     title: "",
     content: "",
     tag_id: "",
-    note_userid: user.id,
+    note_userid: userId,
     category_id: "",
   });
 
