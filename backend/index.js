@@ -21,7 +21,11 @@ const app = express();
 // Connection to the database
 const port = process.env.PORT || 5555; // Provide a default port if APP_PORT is not defined
 mongoose
-  .connect(process.env.MONGO_DB_URL)
+  .connect(process.env.MONGO_DB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 60000, // Set timeout to 60 seconds
+  })
   .then(() => {
     console.log("Database Connected");
     app.listen(port, () => {
@@ -29,7 +33,7 @@ mongoose
     });
   })
   .catch((err) => {
-    console.log("Connection Error");
+    console.error("Connection Error:", err);
   });
 
 const allowedOrigins = [
