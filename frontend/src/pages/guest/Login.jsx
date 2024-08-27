@@ -33,7 +33,7 @@ const Login = () => {
 
   const googleLogin = () => {
     // Redirect to your Express server's Google OAuth2 endpoint
-    window.location.href = "https://mern-fulltack.vercel.app/api/auth/google";
+    window.location.href = "https://mern-fulltack-backend.vercel.app/api/auth/google";
   };
 
   return (

@@ -36,7 +36,7 @@ app.use(
   cors({
     credentials: true,
     // origin: "http://localhost:5173",
-    origin: "https://mern-fulltack-d7d9.vercel.app",
+    origin: "https://mern-fulltack-frontend.vercel.app",
     methods: ["GET", "POST", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
