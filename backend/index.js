@@ -10,6 +10,8 @@ const authRoute = require("./routes/authRoute.js");
 const userRoute = require("./routes/userRoute.js");
 const bookRoute = require("./routes/bookRoute.js");
 const noteRoute = require("./routes/noteRoute.js");
+const tagRoute = require("./routes/tagRoute.js");
+const categoryRoute = require("./routes/categoryRoute.js");
 const checkToken = require("./auth/middleware/validation.js");
 const noteContoller = require("./Controller/noteContoller.js");
 const User = require("./Models/UserModel.js");
@@ -85,5 +87,7 @@ app.get("/all-users", async (req, res) => {
 });
 app.use("/api", authRoute);
 app.use("/api", userRoute);
+app.use("/api", tagRoute);
+app.use("/api", categoryRoute);
 app.use("/api", checkToken, noteRoute);
 app.use("/api", checkToken, bookRoute);

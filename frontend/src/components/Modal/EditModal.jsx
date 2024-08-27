@@ -10,6 +10,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import { useEffect } from "react";
 import axios from "axios";
+import { UserContext } from "../../../context/userContext";
 
 const style = {
   position: "absolute",
@@ -24,6 +25,7 @@ const style = {
 };
 
 export default function EditModal({ open, id, handleClose, onSendData }) {
+  const {tags, categories} = React.useContext(UserContext)
   const [note, setNote] = React.useState({
     title: "",
     content: "",
@@ -97,9 +99,7 @@ export default function EditModal({ open, id, handleClose, onSendData }) {
                 onChange={(e) => setData({ ...data, tag_id: e.target.value })}
                 label="Tag"
               >
-                <MenuItem value="1">To Do</MenuItem>
-                <MenuItem value="2"> Reference</MenuItem>
-                <MenuItem value="3">Meeting</MenuItem>
+                { tags && tags.map((tag) => <MenuItem value={tag._id} key={tag._id}>{tag.name}</MenuItem>) }
               </Select>
             </FormControl>
             <FormControl fullWidth sx={{ mb: 2 }}>
@@ -111,9 +111,7 @@ export default function EditModal({ open, id, handleClose, onSendData }) {
                 }
                 label="Category"
               >
-                <MenuItem value="1">Work</MenuItem>
-                <MenuItem value="2">Personal</MenuItem>
-                <MenuItem value="3">Study</MenuItem>
+                { categories && categories.map((category) => <MenuItem value={category._id} key={category._id}>{category.name}</MenuItem>) }
               </Select>
             </FormControl>
             <Button type="submit" variant="contained">

@@ -55,7 +55,7 @@ const NoteInfo = ({ notes }) => {
   const [color, setColor] = useState("gray");
 
   // user
-  const { user } = useContext(UserContext);
+  const { user, tags, categories } = useContext(UserContext);
 
   const handleOpenDeleteModal = (id) => {
     setNoteId(id);
@@ -112,7 +112,6 @@ const NoteInfo = ({ notes }) => {
     axios
       .patch(`note/${noteId}`, data)
       .then((res) => {
-        console.log(res);
         setOpenEditModal(false);
         setOpenMessage(true);
         setMessage(res.data.message);
@@ -184,16 +183,21 @@ const NoteInfo = ({ notes }) => {
                         component="div"
                         style={{ whiteSpace: "nowrap" }}
                       >
-                        <Button variant="outlined">
-                          {note.category_id == "1" && "Work"}
-                          {note.category_id == "2" && "Personal"}
-                          {note.category_id == "3" && "Study"}
-                          {!(
-                            note.category_id === "1" ||
-                            note.category_id === "2" ||
-                            note.category_id === "3"
-                          ) && "Not Set"}
-                        </Button>
+                        {categories &&
+                          (categories.some(
+                            (category) => category._id === note.category_id
+                          ) ? (
+                            categories.map(
+                              (category) =>
+                                category._id === note.category_id && (
+                                  <Button variant="outlined" key={category._id} style={{color: "white", backgroundColor: category.color}}>
+                                    {category.name}
+                                  </Button>
+                                )
+                            )
+                          ) : (
+                            <Button variant="outlined">Not Set</Button>
+                          ))}
                       </Typography>
                     </Stack>
                     <Typography
@@ -229,16 +233,19 @@ const NoteInfo = ({ notes }) => {
                           Meeting
                         </MenuItem>
                       </Select> */}
-                      <Button variant="contained">
-                        {note.tag_id == "1" && "To do"}
-                        {note.tag_id == "2" && "Reference"}
-                        {note.tag_id == "3" && "Meeting"}
-                        {!(
-                          note.tag_id === "1" ||
-                          note.tag_id === "2" ||
-                          note.tag_id === "3"
-                        ) && "Not Set"}
-                      </Button>
+                      {tags &&
+                        (tags.some((tag) => tag._id === note.tag_id) ? (
+                          tags.map(
+                            (tag) =>
+                              tag._id === note.tag_id && (
+                                <Button variant="outlined" key={tag._id} style={{color: "white", backgroundColor: tag.color}}>
+                                  {tag.name}
+                                </Button>
+                              )
+                          )
+                        ) : (
+                          <Button variant="contained">Not Set</Button>
+                        ))}
                     </Typography>
                     <Typography
                       component={"div"}

@@ -9,7 +9,7 @@ const tagSchema = mongoose.Schema(
     },
     color: {
       type: String,
-      default: "black",
+      default: "gray",
       maxlennght: 100,
     },
   },
