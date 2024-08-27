@@ -26,7 +26,8 @@ const style = {
 
 export default function CreateModal({ open, handleClose, onSendData }) {
   const { user } = React.useContext(UserContext);
-  const userId = null;
+  console.log(user);
+  let userId = null;
   if (user._id) {
     userId = user._id;
   } else {
