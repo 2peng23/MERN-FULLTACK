@@ -35,7 +35,8 @@ mongoose
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:5173",
+    // origin: "http://localhost:5173",
+    origin: "http://https://mern-fulltack-d7d9-4l4j97wbn-riorios-projects.vercel.app",
     methods: ["GET", "POST", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
