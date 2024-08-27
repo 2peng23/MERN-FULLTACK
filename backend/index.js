@@ -18,7 +18,7 @@ dotenv.config(); // Load environment variables
 const app = express();
 
 // Connection to the database
-const port = process.env.APP_PORT || 3000; // Provide a default port if APP_PORT is not defined
+const port = process.env.PORT || 5555; // Provide a default port if APP_PORT is not defined
 mongoose
   .connect(process.env.MONGO_DB_URL)
   .then(() => {
