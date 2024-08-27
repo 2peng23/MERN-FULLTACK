@@ -10,7 +10,7 @@ const googleCallBack = (req, res, next) => {
       return next(err); // Handle authentication errors
     }
     if (!user) {
-      return res.redirect("https://mern-fulltack-d7d9-qau6c418s-riorios-projects.vercel.app/login"); // Handle authentication failure
+      return res.redirect("https://mern-fulltack-d7d9.vercel.app/login"); // Handle authentication failure
     }
 
     // Generate JWT token
@@ -23,14 +23,14 @@ const googleCallBack = (req, res, next) => {
     // Set the cookie with a 1-day expiration time
     res.cookie("token", token, {
       httpOnly: true, // Prevents JavaScript access
-      secure: false, // Not using HTTPS in local development
+      secure: true, // Not using HTTPS in local development
       maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day in milliseconds
       path: "/", // Available site-wide
       sameSite: "Lax", // Adjust if needed
     });
 
     // Redirect to your frontend or any other route
-    res.redirect("https://mern-fulltack-d7d9-qau6c418s-riorios-projects.vercel.app/dashboard");
+    res.redirect("https://mern-fulltack-d7d9.vercel.app/dashboard");
   })(req, res, next);
 };
 

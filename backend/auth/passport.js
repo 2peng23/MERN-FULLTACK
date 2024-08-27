@@ -12,7 +12,7 @@ passport.use(
     {
       clientID: id,
       clientSecret: secret,
-      callbackURL: "https://mern-fulltack-2z01vp8v0-riorios-projects.vercel.app/api/auth/google/callback",
+      callbackURL: "https://mern-fulltack.vercel.app/api/auth/google/callback",
       passReqToCallback: true,
     },
     async (request, accessToken, refreshToken, profile, done) => {
