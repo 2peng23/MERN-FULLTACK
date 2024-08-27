@@ -73,9 +73,15 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 app.get("/all-users", async (req, res) => {
-  const users = await User.find();
-  res.send(users);
+  try {
+    const users = await User.find().limit(100); // Limit to 100 results
+    res.send(users);
+  } catch (err) {
+    console.error('Request Error:', err);
+    res.send(err);
+  }
 });
+
 app.use("/api", authRoute);
 app.use("/api", userRoute);
 app.use("/api", checkToken, noteRoute);
