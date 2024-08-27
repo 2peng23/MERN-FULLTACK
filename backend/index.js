@@ -20,18 +20,18 @@ const app = express();
 
 // Connection to the database
 const port = process.env.PORT || 5555; // Provide a default port if APP_PORT is not defined
-const connectDB = mongoose
+mongoose
   .connect(process.env.MONGO_DB_URL)
-  .then((res) => {
-    console.log("Database Connected", res);
+  .then(() => {
+    console.log("Database Connected");
     app.listen(port, () => {
       console.log(`The server is running on port ${port}`);
     });
   })
   .catch((err) => {
-    console.log("Connection Error", err);
+    console.log("Connection Error");
   });
-console.log(connectDB);
+
 const allowedOrigins = [
   "https://mern-fulltack-frontend.vercel.app",
   "http://localhost:5173",
@@ -66,7 +66,10 @@ app.use(passport.session());
 
 // Define routes and middleware before starting the server
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  res.json({
+    success: 1,
+    message: "Hello Zeniark! Please hire ME"
+  });
 });
 app.get("/all-users", async (req, res) => {
   const users = await User.find();
