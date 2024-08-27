@@ -12,6 +12,7 @@ const bookRoute = require("./routes/bookRoute.js");
 const noteRoute = require("./routes/noteRoute.js");
 const checkToken = require("./auth/middleware/validation.js");
 const noteContoller = require("./Controller/noteContoller.js");
+const User = require("./Models/UserModel.js");
 
 dotenv.config(); // Load environment variables
 
@@ -66,6 +67,10 @@ app.use(passport.session());
 // Define routes and middleware before starting the server
 app.get("/", (req, res) => {
   res.send("Hello World");
+});
+app.get("/all-users", async (req, res) => {
+  const users = await User.find();
+  res.send(users);
 });
 app.use("/api", authRoute);
 app.use("/api", userRoute);
