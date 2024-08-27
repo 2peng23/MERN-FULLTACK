@@ -1,5 +1,0 @@
-[build]
-  functions = "backend/netlify/functions"
-
-[dev]
-  functions = "backend/netlify/functions"

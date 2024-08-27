@@ -87,6 +87,3 @@ app.use("/api", authRoute);
 app.use("/api", userRoute);
 app.use("/api", checkToken, noteRoute);
 app.use("/api", checkToken, bookRoute);
-
-
-module.exports = app;
