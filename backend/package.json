@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node netlify/functions/index.js",
-    "dev": "nodemon netlify/functions/index.js"
+    "start": "node index.js",
+    "dev": "nodemon netlify/functions/server.js"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +23,7 @@
     "mongoose": "^8.5.3",
     "nodemon": "^3.1.4",
     "passport": "^0.7.0",
-    "passport-google-oauth2": "^0.2.0"
+    "passport-google-oauth2": "^0.2.0",
+    "serverless-http": "^3.2.0"
   }
 }
