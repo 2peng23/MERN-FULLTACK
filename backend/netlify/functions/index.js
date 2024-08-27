@@ -5,14 +5,14 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const session = require("express-session");
-require("../auth/passport.js");
-const authRoute = require("../routes/authRoute.js");
-const userRoute = require("../routes/userRoute.js");
-const bookRoute = require("../routes/bookRoute.js");
-const noteRoute = require("../routes/noteRoute.js");
-const checkToken = require("../auth/middleware/validation.js");
-const noteContoller = require("../Controller/noteContoller.js");
-const User = require("../Models/UserModel.js");
+require("../../auth/passport.js");
+const authRoute = require("../../routes/authRoute.js");
+const userRoute = require("../../routes/userRoute.js");
+const bookRoute = require("../../routes/bookRoute.js");
+const noteRoute = require("../../routes/noteRoute.js");
+const checkToken = require("../../auth/middleware/validation.js");
+const noteContoller = require("../../Controller/noteContoller.js");
+const User = require("../../Models/UserModel.js");
 
 dotenv.config(); // Load environment variables
 
