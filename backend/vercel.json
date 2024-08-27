@@ -1,6 +1,6 @@
 {
   "functions": {
-    "index.js": {
+    "/": {
       "maxDuration": 60
     }
   },
