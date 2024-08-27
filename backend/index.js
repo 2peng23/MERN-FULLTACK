@@ -68,12 +68,20 @@ app.use(passport.session());
 app.get("/", (req, res) => {
   res.json({
     success: 1,
-    message: "Hello Zeniark! Please hire ME"
+    message: "Hello Zeniark! Please hire ME",
   });
 });
 app.get("/all-users", async (req, res) => {
-  const users = await User.find();
-  res.send(users);
+  try {
+    const users = await User.find();
+    res.json({
+      data: users,
+    });
+  } catch (error) {
+    res.json({
+      error: error,
+    });
+  }
 });
 app.use("/api", authRoute);
 app.use("/api", userRoute);
