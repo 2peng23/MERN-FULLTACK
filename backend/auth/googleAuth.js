@@ -10,7 +10,7 @@ const googleCallBack = (req, res, next) => {
       return next(err); // Handle authentication errors
     }
     if (!user) {
-      return res.redirect("http://localhost:5173/login"); // Handle authentication failure
+      return res.redirect("https://mern-fulltack-d7d9-qau6c418s-riorios-projects.vercel.app/login"); // Handle authentication failure
     }
 
     // Generate JWT token
@@ -30,7 +30,7 @@ const googleCallBack = (req, res, next) => {
     });
 
     // Redirect to your frontend or any other route
-    res.redirect("http://localhost:5173/dashboard");
+    res.redirect("https://mern-fulltack-d7d9-qau6c418s-riorios-projects.vercel.app/dashboard");
   })(req, res, next);
 };
 
